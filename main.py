@@ -3,15 +3,22 @@ def solve_primer(primer):
     operation = []
     numbers = []
     last_key = 0
-    primer = primer
-
+    flag = False
     for key in range(len(primer)):
-        if primer[key] < "0" or primer[key] > "9":
-            operation.append(primer[key])
-            numbers.append(int(primer[last_key:key]))
-            last_key = key + 1
-    numbers.append(int(primer[last_key:len(primer)]))
 
+        if primer[key] < "0" or primer[key] > "9":
+            if (key > 0 and primer[key] == "-" and (primer[key-1] < "0" or primer[key-1] > "9")) or key == 0 and primer[key] == "-":
+                flag = True
+            else:
+                operation.append(primer[key])
+                if flag is True:
+                    numbers.append(int(primer[last_key+1:key])*(-1))
+                    flag = False
+                else:
+                    numbers.append(int(primer[last_key:key]))
+                last_key = key + 1
+    numbers.append(int(primer[last_key:len(primer)]))
+    print(numbers,operation)
     key = 0
     while key < len(operation):
         if operation[key] == "*" or operation[key] == "/":
@@ -63,4 +70,3 @@ while "(" in primer_full:
     print(primer)
     primer_full = primer
 print(solve_primer(primer_full))
-
